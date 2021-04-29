@@ -23,6 +23,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -58,14 +60,12 @@ class AccountControllerTest {
         this.accounts.add(new Account(5, "Sama", "SAVING",80000));
         this.accounts.add(new Account(7, "Dutt", "SAVING",40000));
         this.accounts.add(new Account(6, "Trix", "CURRENT",70000));
+        this.accounts.add(new Account(8, "Trix", "CURRENT",90000));
     }
 
     @Test
     public void insertDataTest() throws Exception {
-        Account account = new Account();
-        account.setName("Ran");
-        account.setBalance(500);
-        account.setType("SAVING");
+        Account account = new Account(100, "Ran", "SAVING", 500);
         String jsonRequest = om.writeValueAsString(account);
 
         MvcResult result = mockMvc.perform(post("/bank/insertData")
@@ -96,10 +96,10 @@ class AccountControllerTest {
 
     @Test
     void findDataByNameTest() throws Exception {
-        given(userService.getDataByName("Trix")).willReturn(accounts.get(2));
+        given(userService.getDataByName("Trix")).willReturn(Stream.of(accounts.get(6), accounts.get(8)).collect(Collectors.toList()));
         this.mockMvc.perform(get("/bank/getDataByName/{name}", "Trix"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.accId").value(accounts.get(2).getAccId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2));
     }
 
     @Test

@@ -30,7 +30,7 @@ public class AccountController {
         return service.getDataById(id);
     }
     @GetMapping("/getDataByName/{name}")
-    public Account findAccountByName(@PathVariable String name){
+    public List<Account> findAccountByName(@PathVariable String name){
         return service.getDataByName(name);
     }
 

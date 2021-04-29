@@ -1,7 +1,7 @@
 package com.unittesting.UnitTesting;
 
 import com.unittesting.UnitTesting.controller.AccountController;
-import com.unittesting.UnitTesting.dao.AccountDAO;
+import com.unittesting.UnitTesting.dao.AccountRepository;
 import com.unittesting.UnitTesting.model.Account;
 import com.unittesting.UnitTesting.service.AccountService;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ class UnitTestingApplicationTests {
 	private AccountService service;
 
 	@MockBean
-	private AccountDAO repo;
+	private AccountRepository repo;
 	private AccountController control;
 
 
@@ -43,9 +43,9 @@ class UnitTestingApplicationTests {
 
 	@Test
 	public void getDataByNameTest(){
-		String name = "Hari";
-		when(repo.findByName(name)).thenReturn(new Account(1, "Hari", "Saving", 60000));
-		assertEquals("Hari", service.getDataByName(name).getName());
+		String name = "name";
+		when(repo.findByName(name)).thenReturn(Stream.of(new Account(1, "name", "Saving", 60000), new Account(2, "name", "Current", 90000)).collect(Collectors.toList()));
+		assertEquals(2, service.getDataByName(name).size());
 	}
 
 	@Test

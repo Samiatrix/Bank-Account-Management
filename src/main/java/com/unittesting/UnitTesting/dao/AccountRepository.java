@@ -3,8 +3,10 @@ package com.unittesting.UnitTesting.dao;
 import com.unittesting.UnitTesting.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
-public interface AccountDAO extends JpaRepository<Account, Integer> {
-    Account findByName(String name);
+
+public interface AccountRepository extends JpaRepository<Account, Integer> {
+    List<Account> findByName(String name);
 }
 

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "accounts_tbl")
 public class Account {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer accId;
 
     private String name;
@@ -19,4 +19,5 @@ public class Account {
     private String type;
 
     private Integer balance;
+
 }
