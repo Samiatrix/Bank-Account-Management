@@ -96,7 +96,7 @@ class AccountControllerTest {
 
     @Test
     void findDataByNameTest() throws Exception {
-        given(userService.getDataByName("Trix")).willReturn(Stream.of(accounts.get(6), accounts.get(8)).collect(Collectors.toList()));
+        given(userService.getDataByName("Trix")).willReturn(Stream.of(accounts.get(2), accounts.get(3)).collect(Collectors.toList()));
         this.mockMvc.perform(get("/bank/getDataByName/{name}", "Trix"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(2));
