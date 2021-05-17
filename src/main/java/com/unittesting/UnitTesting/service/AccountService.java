@@ -1,5 +1,6 @@
 package com.unittesting.UnitTesting.service;
 
+import com.unittesting.UnitTesting.Exception.ResourceNotFoundException;
 import com.unittesting.UnitTesting.dao.AccountRepository;
 import com.unittesting.UnitTesting.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +18,30 @@ public class AccountService {
     }
 
     public List<Account> getData(){
-        return repository.findAll();
+        List<Account> allAccounts = null;
+        try {
+            allAccounts = repository.findAll();
+        }
+        catch(Exception e){
+            throw new ResourceNotFoundException("No Data Found");
+        }
+        return allAccounts;
     }
 
     public Account getDataById(int id){
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account with id "+id+" not found"));
     }
 
-    public List<Account> getDataByName(String name){
-        return repository.findByName(name);
-    }
-
-    public String deleteData(int id){
+    public void deleteAccountById(int id){
+        repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account with id "+id+" not found"));
         repository.deleteById(id);
-        return "Data deleted with the id: "+id;
     }
 
     public Account updateData(Account account){
-        Account existingData = repository.findById(account.getAccId()).orElse(null);
-        existingData.setName(account.getName());
-        existingData.setType(account.getType());
-        existingData.setBalance(account.getBalance());
-        return repository.save(existingData);
+        Account existingUser = repository.findById(account.getAccId()).orElseThrow(() -> new ResourceNotFoundException("Account with id "+account.getAccId()+" not found"));
+        existingUser.setName(account.getName());
+        existingUser.setType(account.getType());
+        existingUser.setBalance(account.getBalance());
+        return repository.save(existingUser);
     }
 }

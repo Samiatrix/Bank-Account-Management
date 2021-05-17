@@ -1,18 +1,23 @@
 package com.unittesting.UnitTesting.controller;
 
+import com.unittesting.UnitTesting.dao.AccountRepository;
 import com.unittesting.UnitTesting.model.Account;
 import com.unittesting.UnitTesting.model.Response;
 import com.unittesting.UnitTesting.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/bank")
 public class AccountController {
     @Autowired
     private AccountService service;
+    private AccountRepository repo;
 
     @PostMapping("/insertData")
     public Response insertAccount(@RequestBody Account account){
@@ -29,18 +34,14 @@ public class AccountController {
     public Account findAccountById(@PathVariable int id){
         return service.getDataById(id);
     }
-    @GetMapping("/getDataByName/{name}")
-    public List<Account> findAccountByName(@PathVariable String name){
-        return service.getDataByName(name);
-    }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public Account updateAccountData(@RequestBody Account account){
         return service.updateData(account);
     }
 
-    @DeleteMapping("/deleteData/{id}")
-    public String deleteAccount(@PathVariable int id){
-        return service.deleteData(id);
+    @DeleteMapping("/deleteById/{id}")
+    public void deleteAccount(@PathVariable int id){
+        service.deleteAccountById(id);
     }
 }
