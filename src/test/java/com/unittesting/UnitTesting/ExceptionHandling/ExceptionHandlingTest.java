@@ -28,7 +28,7 @@ class ExceptionHandlingTest {
 	@Test
 	public void resourceNotFoundExceptionTest(){
 		when(repo.findAll()).thenThrow(ResourceNotFoundException.class);
-		assertThrows(ResourceNotFoundException.class, () -> service.getData());
+		assertThrows(ResourceNotFoundException.class, () -> service.getAccountDetails());
 	}
 
 

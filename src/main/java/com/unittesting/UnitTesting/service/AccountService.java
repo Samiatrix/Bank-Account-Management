@@ -13,11 +13,11 @@ public class AccountService {
     @Autowired
     private AccountRepository repository;
 
-    public Account saveData(Account account){
+    public Account saveAccount(Account account){
         return repository.save(account);
     }
 
-    public List<Account> getData(){
+    public List<Account> getAccountDetails(){
         List<Account> allAccounts = null;
         try {
             allAccounts = repository.findAll();
@@ -28,7 +28,7 @@ public class AccountService {
         return allAccounts;
     }
 
-    public Account getDataById(int id){
+    public Account getAccountDetailsById(int id){
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account with id "+id+" not found"));
     }
 
@@ -37,7 +37,7 @@ public class AccountService {
         repository.deleteById(id);
     }
 
-    public Account updateData(Account account){
+    public Account updateAccountDetails(Account account){
         Account existingUser = repository.findById(account.getAccId()).orElseThrow(() -> new ResourceNotFoundException("Account with id "+account.getAccId()+" not found"));
         existingUser.setName(account.getName());
         existingUser.setType(account.getType());

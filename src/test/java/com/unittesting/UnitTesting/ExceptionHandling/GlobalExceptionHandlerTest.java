@@ -47,9 +47,9 @@ public class GlobalExceptionHandlerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void catchesRuntimeExceptionWhenIdNotFound() throws Exception {
+    public void catchesRuntimeExceptionWhenIdNotFoundTest() throws Exception {
 
-        this.mockMvc.perform(get("/bank/getDataById/{id}", 20))
+        this.mockMvc.perform(get("/bank/getAccountDetailsById/{id}", 20))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("message").value("Account with id 20 not found"));
     }

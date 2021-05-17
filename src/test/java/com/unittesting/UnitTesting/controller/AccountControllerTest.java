@@ -24,14 +24,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebMvcTest(controllers = AccountController.class)
@@ -68,11 +66,11 @@ class AccountControllerTest {
     }
 
     @Test
-    public void insertDataTest() throws Exception {
+    public void createAccountControllerTest() throws Exception {
         Account account = new Account(100, "Ran", "SAVING", 500);
         String jsonRequest = om.writeValueAsString(account);
 
-        MvcResult result = mockMvc.perform(post("/bank/insertData")
+        MvcResult result = mockMvc.perform(post("/bank/createAccount")
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk()).andReturn();
@@ -82,43 +80,40 @@ class AccountControllerTest {
     }
 
     @Test
-    void findAllData() throws Exception{
-        given(userService.getData()).willReturn(accounts);
-        this.mockMvc.perform(get("/bank/getData"))
+    void getAccountDetailsControllerTest() throws Exception{
+        given(userService.getAccountDetails()).willReturn(accounts);
+        this.mockMvc.perform(get("/bank/getAccountDetails"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(accounts.size()));
     }
 
     @Test
-    void findDataByIdTest() throws Exception {
-        given(userService.getDataById(6)).willReturn(accounts.get(2));
-        this.mockMvc.perform(get("/bank/getDataById/{id}", 6))
+    void getAccountDetailsByIdControllerTest() throws Exception {
+        given(userService.getAccountDetailsById(6)).willReturn(accounts.get(2));
+        this.mockMvc.perform(get("/bank/getAccountDetailsById/{id}", 6))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(accounts.get(2).getName()));
     }
 
 //    @Test
-//    void updateData() throws Exception{
-//        given(userService.getDataById(3)).willReturn(accounts.get(2));
-//
-//        Account account = new Account();
-//        account.setAccId(3);
-//        account.setName("hhh");
-//        account.setType("CURRENT");
-//        account.setBalance(32000);
-//        when(userService.updateData(account)).thenReturn(account);
-//        String json = om.writeValueAsString(account);
-//        mockMvc.perform(put("/bank/update").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-//                .content(json).accept(MediaType.APPLICATION_JSON))
+//    void updateAccountDetails() throws Exception{
+//        Account existingAccount = new Account(1, "name", "SAVING", 79900);
+//        Account newAccount = new Account(1, "name", "SAVING", 79900);
+//        when(userService.updateAccountDetails(existingAccount)).thenReturn(newAccount);
+//        String url = "/bank/update";
+//        mockMvc.perform(put(url)
+//                .contentType("application/json")
+//                .content(om.writeValueAsString(existingAccount)))
 //                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.name").value("hhh"));
+//                .andExpect(content().string("1"))
+//                .andDo(print());
 //    }
 
     @Test
-    void deleteUser() throws Exception{
+    void deleteAccountByIdTest() throws Exception{
        Integer id = 7;
        doNothing().when(userService).deleteAccountById(id);
-       String url = "/bank/deleteById/"+id;
+       String url = "/bank/deleteAccountById/"+id;
         mockMvc.perform(delete(url))
                 .andExpect(status().isOk());
         verify(userService, times(1)).deleteAccountById(id);
