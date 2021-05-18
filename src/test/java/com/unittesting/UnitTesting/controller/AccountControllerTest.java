@@ -95,19 +95,24 @@ class AccountControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(accounts.get(2).getName()));
     }
 
-//    @Test
-//    void updateAccountDetails() throws Exception{
-//        Account existingAccount = new Account(1, "name", "SAVING", 79900);
-//        Account newAccount = new Account(1, "name", "SAVING", 79900);
-//        when(userService.updateAccountDetails(existingAccount)).thenReturn(newAccount);
-//        String url = "/bank/update";
-//        mockMvc.perform(put(url)
-//                .contentType("application/json")
-//                .content(om.writeValueAsString(existingAccount)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("1"))
-//                .andDo(print());
-//    }
+    @Test
+    void updateAccountDetails() throws Exception{
+        Account account = new Account(3, "name", "Current", 43455);
+        Account newAccount = new Account(3, "newName", "Current", 434555);
+        given(userService.getAccountDetailsById(3)).willReturn(account);
+        given(userService.saveAccount(newAccount)).willReturn(newAccount);
+
+        String jsonRequest = om.writeValueAsString(newAccount);
+
+        String url = "/bank/update";
+        MvcResult result = mockMvc.perform(patch(url)
+                .content(jsonRequest)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk()).andReturn();
+
+        String resultContent = result.getResponse().getContentAsString();
+        System.out.println(resultContent);
+    }
 
     @Test
     void deleteAccountByIdTest() throws Exception{

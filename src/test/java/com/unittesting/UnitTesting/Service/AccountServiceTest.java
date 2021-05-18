@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,14 +20,12 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class UnitTestingApplicationTests {
+class AccountServiceTest {
 	@Autowired
 	private AccountService service;
 
 	@MockBean
 	private AccountRepository repo;
-	private AccountController control;
-
 
 	@Test
 	public void getAccountDetailsTest(){
@@ -48,10 +47,15 @@ class UnitTestingApplicationTests {
 		assertEquals(account, service.saveAccount(account));
 	}
 
-//	@Test
-//	public void updateDataTest(){
-//
-//	}
+	@Test
+	public void updateDataTest(){
+		Account account = new Account(3, "name", "Current", 43455);
+		when(repo.findById(3)).thenReturn(java.util.Optional.of(new Account(3, "name", "Current", 43455)));
+		Account newAccount = new Account(3, "newName", "Current", 434555);
+		when(repo.save(newAccount)).thenReturn(newAccount);
+		assertEquals(newAccount, service.updateAccountDetails(newAccount));
+
+	}
 	@Test
 	public void deleteAccountTest(){
 		when(repo.findById(3)).thenReturn(java.util.Optional.of(new Account(3, "name", "Current", 140000)));

@@ -14,7 +14,9 @@ public class AccountService {
     private AccountRepository repository;
 
     public Account saveAccount(Account account){
-        return repository.save(account);
+        Account newAccount = repository.save(account);
+        System.out.println(newAccount);
+        return newAccount;
     }
 
     public List<Account> getAccountDetails(){
@@ -29,7 +31,9 @@ public class AccountService {
     }
 
     public Account getAccountDetailsById(int id){
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account with id "+id+" not found"));
+        Account account = null;
+        account = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account with id "+id+" not found"));
+        return account;
     }
 
     public void deleteAccountById(int id){
@@ -38,10 +42,11 @@ public class AccountService {
     }
 
     public Account updateAccountDetails(Account account){
-        Account existingUser = repository.findById(account.getAccId()).orElseThrow(() -> new ResourceNotFoundException("Account with id "+account.getAccId()+" not found"));
-        existingUser.setName(account.getName());
-        existingUser.setType(account.getType());
-        existingUser.setBalance(account.getBalance());
-        return repository.save(existingUser);
+        Account existingAccount = repository.findById(account.getAccId()).orElseThrow(() -> new ResourceNotFoundException("Account with id "+account.getAccId()+" not found"));
+        existingAccount.setName(account.getName());
+        existingAccount.setType(account.getType());
+        existingAccount.setBalance(account.getBalance());
+        Account updatedAccount = repository.save(existingAccount);
+        return updatedAccount;
     }
 }

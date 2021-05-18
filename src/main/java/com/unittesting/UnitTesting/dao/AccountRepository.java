@@ -7,6 +7,7 @@ import java.util.List;
 
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-    
+
+    Account findByName(String name);
 }
 

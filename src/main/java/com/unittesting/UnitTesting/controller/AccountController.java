@@ -32,7 +32,7 @@ public class AccountController {
         return service.getAccountDetailsById(id);
     }
 
-    @PutMapping("/updateAccount/{id}")
+    @PutMapping("/updateAccount")
     public Account updateAccountData(@RequestBody Account account){
         return service.updateAccountDetails(account);
     }
